@@ -63,5 +63,12 @@ namespace Template_4333
             ibragimov.Show();
             this.Hide();
         }
+
+        private void _4333_Islamkhuzin(object sender, RoutedEventArgs e)
+        {
+            _4333_Islamkhuzin azat = new _4333_Islamkhuzin();
+            azat.Show();
+            this.Hide();
+        }
     }
 }
