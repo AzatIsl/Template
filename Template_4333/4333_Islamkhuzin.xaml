@@ -8,5 +8,7 @@
         Title="_4333_Islamkhuzin" Height="450" Width="800">
     <Grid Background="AliceBlue">
         <Label HorizontalAlignment="Center" Content="Исламхузин Азат Ринатович, группа 4333, 19 лет" FontSize="30"></Label>
+        <Button Background="AliceBlue" Width="800" Height="150" FontSize="30" Click="Import_Click">Импорт данных</Button>
+        <Button Background="AliceBlue" Width="800" Height="150" FontSize="30" Margin="0,292,0,-8" Click="Export_Click"> Экспорт в Excel</Button>
     </Grid>
 </Window>
