@@ -72,7 +72,63 @@ namespace Template_4333
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
-           
+            using (var context = new GITZd2Entities())
+            {
+                var statuses = context.zad2_table.Select(x => x.Status).Distinct().ToList();
+                var app = new Microsoft.Office.Interop.Excel.Application
+                {
+                    //Отобразить Excel
+                    Visible = true,
+                    //Количество листов в рабочей книге
+                    SheetsInNewWorkbook = statuses.Count()
+                };
+                Microsoft.Office.Interop.Excel.Workbook workbook = app.Workbooks.Add(Type.Missing);
+                int i = 1;
+                foreach (var status in statuses)
+                {
+                    var data = context.zad2_table.Where(x => x.Status == status).ToList().OrderByDescending(x=>Convert.ToInt32(x.ID));
+
+                    Microsoft.Office.Interop.Excel.Worksheet xlWorksheet = (Microsoft.Office.Interop.Excel.Worksheet)app.Worksheets.get_Item(i++);
+                    xlWorksheet.Name = status;
+                    int lastRow = 0;
+
+                    xlWorksheet.Cells[lastRow + 1, 1] = "ID";
+                    xlWorksheet.Cells[lastRow + 1, 2] = "Код заказа";
+                    xlWorksheet.Cells[lastRow + 1, 3] = "Дата создания";
+                    xlWorksheet.Cells[lastRow + 1, 4] = "Время заказа";
+                    xlWorksheet.Cells[lastRow + 1, 5] = "Код клиента";
+                    xlWorksheet.Cells[lastRow + 1, 6] = "Услуги";
+                    xlWorksheet.Cells[lastRow + 1, 7] = "Статус";
+                    xlWorksheet.Cells[lastRow + 1, 8] = "Дата закрытия";
+                    xlWorksheet.Cells[lastRow + 1, 9] = "Время проката";
+                    lastRow++;
+
+                    foreach (var row in data)
+                    {
+                        // Добавляем новую строку после последней заполненной строки
+                        Microsoft.Office.Interop.Excel.Range range = xlWorksheet.Range["A" + (lastRow + 1).ToString(), "A" + (lastRow + 1).ToString()];
+                        range.EntireRow.Insert(Microsoft.Office.Interop.Excel.XlInsertShiftDirection.xlShiftDown);
+
+                        // Заполняем добавленную строку данными
+                        xlWorksheet.Cells[lastRow + 1, 1] = row.ID; 
+                        xlWorksheet.Cells[lastRow + 1, 2] = row.OrderCode;
+                        xlWorksheet.Cells[lastRow + 1, 3] = row.DateOfCreation;
+                        xlWorksheet.Cells[lastRow + 1, 4] = row.OrderTime ;
+                        xlWorksheet.Cells[lastRow + 1, 5] = row.ClientCode;
+                        xlWorksheet.Cells[lastRow + 1, 6] = row.Services ;
+                        xlWorksheet.Cells[lastRow + 1, 7] = row.Status;
+                        xlWorksheet.Cells[lastRow + 1, 8] = row.ClosingDate ;
+                        xlWorksheet.Cells[lastRow + 1, 9] = row.RentalTime;
+
+                    } 
+                }
+                // сохранение данных в отдельный файл или лист Excel
+                workbook.SaveAs("C:\\Users\\azati\\OneDrive\\Рабочий стол\\Лабораторные работы\\h.xlsx");
+                workbook.Close();
+                app.Quit();
+            }
+
+            return;
 
         }
     }
